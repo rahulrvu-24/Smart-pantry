@@ -1,10 +1,23 @@
+import { Route, Routes } from 'react-router-dom'
 import Layout from './components/layout'
+import Dashboard from './pages/dashboard'
+import Pantry from './pages/pantry'
+import AddItem from './pages/additem'
+import Recipes from './pages/recipes'
+import RecipeDetail from './pages/recipedetail'
+import NotFound from './pages/notfound'
 
 function App() {
   return (
     <Layout>
-      <h1 className="text-2xl font-bold sm:text-3xl">Smart Pantry</h1>
-      <p className="mt-2 text-stone-600">Pages are coming in the next commit.</p>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/pantry" element={<Pantry />} />
+        <Route path="/add" element={<AddItem />} />
+        <Route path="/recipes" element={<Recipes />} />
+        <Route path="/recipes/:id" element={<RecipeDetail />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </Layout>
   )
 }
