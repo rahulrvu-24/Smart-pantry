@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* App-wide theme tokens (used as Tailwind utilities, e.g. bg-brand-600) */
+@theme {
+  --color-brand-50: #f0fdf4;
+  --color-brand-100: #dcfce7;
+  --color-brand-600: #16a34a;
+  --color-brand-700: #15803d;
+  --color-brand-800: #166534;
+}
+
+body {
+  @apply bg-stone-50 text-stone-800 antialiased;
+}
