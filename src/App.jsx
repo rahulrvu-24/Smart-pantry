@@ -1,8 +1,11 @@
+import Layout from './components/layout'
+
 function App() {
   return (
-    <main className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold text-brand-700">Smart Pantry</h1>
-    </main>
+    <Layout>
+      <h1 className="text-2xl font-bold sm:text-3xl">Smart Pantry</h1>
+      <p className="mt-2 text-stone-600">Pages are coming in the next commit.</p>
+    </Layout>
   )
 }
 
