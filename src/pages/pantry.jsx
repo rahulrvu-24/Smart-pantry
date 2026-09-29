@@ -1,10 +1,11 @@
 import PageHeader from '../components/pageheader'
 import Placeholder from '../components/placeholder'
 
-function Pantry() {
+// Receives the pantry items from App as a prop
+function Pantry({ items }) {
   return (
     <>
-      <PageHeader title="My Pantry" subtitle="Everything you have at home, in one place." />
+      <PageHeader title="My Pantry" subtitle={`You have ${items.length} items at home.`} />
       <Placeholder
         day="Days 2–3"
         items={[
