@@ -7,8 +7,15 @@ const CATEGORY_STYLES = {
 }
 
 // Child component: displays ONE pantry item. Everything it shows comes from the `item` prop.
-function PantryItem({ item }) {
-  const { name, quantity, unit, category, expiryDate } = item
+// It doesn't change state itself; it calls the onUse / onDelete functions its parent passed in.
+function PantryItem({ item, onUse, onDelete }) {
+  const { id, name, quantity, unit, category, expiryDate } = item
+
+  const handleDeleteClick = () => {
+    if (window.confirm(`Remove ${name} from your pantry?`)) {
+      onDelete(id)
+    }
+  }
 
   return (
     <li className="flex flex-col rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
@@ -31,6 +38,23 @@ function PantryItem({ item }) {
           <dd className="font-medium text-stone-800">{formatDate(expiryDate)}</dd>
         </div>
       </dl>
+
+      <div className="mt-4 flex gap-2 pt-1">
+        <button
+          type="button"
+          onClick={() => onUse(id)}
+          className="flex-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-medium text-white hover:bg-brand-700"
+        >
+          {quantity === 1 ? 'Use last one' : 'Use 1'}
+        </button>
+        <button
+          type="button"
+          onClick={handleDeleteClick}
+          className="rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
+        >
+          Delete
+        </button>
+      </div>
     </li>
   )
 }

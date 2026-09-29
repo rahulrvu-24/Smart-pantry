@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import PantryItem from './pantryitems'
 
 // Parent of PantryItem: receives the whole array and renders one child per item.
-function PantryList({ items }) {
+function PantryList({ items, onUse, onDelete }) {
   if (items.length === 0) {
     return (
       <div className="rounded-xl border border-stone-200 bg-white p-10 text-center">
@@ -19,7 +19,7 @@ function PantryList({ items }) {
     <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => (
         // key lets React track each item between renders
-        <PantryItem key={item.id} item={item} />
+        <PantryItem key={item.id} item={item} onUse={onUse} onDelete={onDelete} />
       ))}
     </ul>
   )
