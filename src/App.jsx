@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Layout from './components/layout'
 import ErrorBoundary from './components/errorboundary'
@@ -10,13 +10,16 @@ import RecipeDetail from './pages/recipedetail'
 import ErrorDemo from './pages/errordemo'
 import NotFound from './pages/notfound'
 import { createSeedItems } from './data/pantry'
+import { loadItems, saveItems } from './utils/storage'
 
 function App() {
   const location = useLocation()
+  const [items, setItems] = useState(loadItems)
 
-  // Single source of truth for the pantry. Lives in App (the top-level parent)
-  // so every page that needs it can receive it as a prop.
-  const [items, setItems] = useState(createSeedItems)
+  // Side effect: save to localStorage every time `items` changes
+  useEffect(() => {
+    saveItems(items)
+  }, [items])
 
   // Event handlers live next to the state they change, and are passed down as props.
   // "Use 1": reduce quantity by one; remove the item when the last one is used.
@@ -32,6 +35,10 @@ function App() {
     setItems((prev) => prev.filter((item) => item.id !== id))
   }
 
+  const handleReset = () => {
+    setItems(createSeedItems())
+  }
+
   return (
     <Layout>
       {/* Changing the key remounts the boundary, clearing a caught error on navigation */}
@@ -40,7 +47,9 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route
             path="/pantry"
-            element={<Pantry items={items} onUse={handleUseOne} onDelete={handleDelete} />}
+            element={
+              <Pantry items={items} onUse={handleUseOne} onDelete={handleDelete} onReset={handleReset} />
+            }
           />
           <Route path="/add" element={<AddItem />} />
           <Route path="/recipes" element={<Recipes />} />
