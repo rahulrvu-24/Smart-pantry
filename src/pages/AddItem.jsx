@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import PageHeader from '../components/pageheader'
-import AddItemForm from '../components/additemform'
+import PageHeader from '../components/PageHeader'
+import AddItemForm from '../components/AddItemForm'
 
 // Page component: the form only collects data; the page decides what happens after (navigation).
 function AddItem({ onAdd }) {

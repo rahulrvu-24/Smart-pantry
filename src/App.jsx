@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import Layout from './components/layout'
-import ErrorBoundary from './components/errorboundary'
-import Dashboard from './pages/dashboard'
-import Pantry from './pages/pantry'
-import AddItem from './pages/additem'
-import Recipes from './pages/recipes'
-import RecipeDetail from './pages/recipedetail'
-import ErrorDemo from './pages/errordemo'
-import NotFound from './pages/notfound'
+import Layout from './components/Layout'
+import ErrorBoundary from './components/ErrorBoundary'
+import Dashboard from './pages/Dashboard'
+import Pantry from './pages/Pantry'
+import AddItem from './pages/AddItem'
+import Recipes from './pages/Recipes'
+import RecipeDetail from './pages/RecipeDetail'
+import ErrorDemo from './pages/ErrorDemo'
+import NotFound from './pages/NotFound'
 import { createSeedItems } from './data/pantry'
 import { loadItems, saveItems } from './utils/storage'
 
 function App() {
   const location = useLocation()
+
+  // Single source of truth for the pantry. Lives in App (the top-level parent)
+  // so every page that needs it can receive it as a prop.
+  // Passing a function (not its result) means localStorage is only read on the first render.
   const [items, setItems] = useState(loadItems)
 
   // Side effect: save to localStorage every time `items` changes

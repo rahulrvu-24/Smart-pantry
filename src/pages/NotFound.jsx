@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import PageHeader from '../components/pageheader'
+import PageHeader from '../components/PageHeader'
 
 function NotFound() {
   return (

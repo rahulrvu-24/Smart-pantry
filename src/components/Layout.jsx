@@ -1,5 +1,5 @@
-import Navbar from './navbar'
-import Footer from './footer'
+import Navbar from './Navbar'
+import Footer from './Footer'
 
 // Navigation config lives here and is passed down to Navbar as a prop.
 const NAV_LINKS = [

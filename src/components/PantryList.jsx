@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import PantryItem from './pantryitems'
+import PantryItem from './PantryItem'
 
 // Parent of PantryItem: receives the whole array and renders one child per item.
 function PantryList({ items, onUse, onDelete }) {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import PageHeader from '../components/pageheader'
+import PageHeader from '../components/PageHeader'
 
 // A child that throws while rendering, so the ErrorBoundary can catch it
 function BrokenWidget() {

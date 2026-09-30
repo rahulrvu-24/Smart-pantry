@@ -1,5 +1,5 @@
-import PageHeader from '../components/pageheader'
-import Placeholder from '../components/placeholder'
+import PageHeader from '../components/PageHeader'
+import Placeholder from '../components/Placeholder'
 
 function Recipes() {
   return (
