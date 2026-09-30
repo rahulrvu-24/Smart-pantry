@@ -35,6 +35,12 @@ function App() {
     setItems((prev) => prev.filter((item) => item.id !== id))
   }
 
+  // Add a new item from the form. The form doesn't know about ids, so App creates one.
+  const handleAddItem = (newItem) => {
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    setItems((prev) => [{ ...newItem, id }, ...prev])
+  }
+
   const handleReset = () => {
     setItems(createSeedItems())
   }
@@ -51,7 +57,7 @@ function App() {
               <Pantry items={items} onUse={handleUseOne} onDelete={handleDelete} onReset={handleReset} />
             }
           />
-          <Route path="/add" element={<AddItem />} />
+          <Route path="/add" element={<AddItem onAdd={handleAddItem} />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/recipes/:id" element={<RecipeDetail />} />
           <Route path="/error-demo" element={<ErrorDemo />} />

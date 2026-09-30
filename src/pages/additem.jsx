@@ -1,17 +1,12 @@
 import PageHeader from '../components/pageheader'
-import Placeholder from '../components/placeholder'
+import AddItemForm from '../components/additemform'
 
-function AddItem() {
+// Page component: receives onAdd from App and passes it to the form
+function AddItem({ onAdd }) {
   return (
     <>
       <PageHeader title="Add Item" subtitle="Log groceries with a quantity and expiry date." />
-      <Placeholder
-        day="Day 3"
-        items={[
-          'Controlled form: name, quantity, category, expiry date',
-          'Validation, then redirect to the pantry on submit',
-        ]}
-      />
+      <AddItemForm onAdd={onAdd} />
     </>
   )
 }
