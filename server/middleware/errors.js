@@ -2,7 +2,7 @@ export function notFound(req, res) {
   res.status(404).json({ error: `No API route for ${req.method} ${req.originalUrl}` })
 }
 
-export function errorHandler(err, req, res, next) {
+export function errorHandler(err, req, res, _next) {
   // Malformed JSON in the request body
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({ error: 'Request body is not valid JSON' })

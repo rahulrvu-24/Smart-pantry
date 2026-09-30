@@ -5,9 +5,8 @@ import PantryFilters from '../components/PantryFilters'
 import PantryList from '../components/PantryList'
 import { CATEGORIES } from '../data/pantry'
 
-// Receives items and handlers from App and passes them down to PantryList
-function Pantry({ items, onUse, onDelete, onReset }) {
-  // Filter state only matters on this page, so it lives here (not in App)
+function Pantry({ items, loading, onUse, onDelete, onReset }) {
+
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All')
 
@@ -35,7 +34,10 @@ function Pantry({ items, onUse, onDelete, onReset }) {
 
   return (
     <>
-      <PageHeader title="My Pantry" subtitle={`You have ${items.length} items at home.`}>
+      <PageHeader
+        title="My Pantry"
+        subtitle={loading ? 'Loading your pantry…' : `You have ${items.length} items at home.`}
+      >
         <button
           type="button"
           onClick={onReset}
@@ -67,7 +69,11 @@ function Pantry({ items, onUse, onDelete, onReset }) {
         </p>
       )}
 
-      {noMatches ? (
+      {loading ? (
+        <div className="rounded-xl border border-stone-200 bg-white p-10 text-center text-stone-500">
+          Loading your pantry…
+        </div>
+      ) : noMatches ? (
         <div className="rounded-xl border border-stone-200 bg-white p-10 text-center">
           <p className="text-stone-600">No items match your search and filters.</p>
           <button type="button" onClick={clearFilters} className="mt-3 font-medium text-brand-700 hover:underline">

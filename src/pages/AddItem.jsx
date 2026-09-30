@@ -2,13 +2,12 @@ import { useNavigate } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import AddItemForm from '../components/AddItemForm'
 
-// Page component: the form only collects data; the page decides what happens after (navigation).
 function AddItem({ onAdd }) {
   const navigate = useNavigate()
 
-  const handleAdd = (newItem) => {
-    onAdd(newItem) // update App's state
-    navigate('/pantry') // then go to the pantry to see it
+  const handleAdd = async (newItem) => {
+    const saved = await onAdd(newItem)
+    if (saved) navigate('/pantry')
   }
 
   const handleCancel = () => navigate('/pantry')
