@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { readItems, writeItems } from '../store.js'
 import { createSeedItems } from '../data/seed.js'
+import { validateItem } from '../validation.js'
 
 const router = Router()
 
@@ -12,10 +13,15 @@ router.get('/', async (req, res) => {
 
 // POST /api/items -> add a new item (data comes from req.body)
 router.post('/', async (req, res) => {
+  const errors = validateItem(req.body)
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({ error: 'Validation failed', details: errors }) // 400 Bad Request
+  }
+
   const { name, quantity, unit, category, expiryDate } = req.body
   const newItem = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    name: String(name).trim(),
+    name: name.trim(),
     quantity: Number(quantity),
     unit,
     category,
@@ -64,7 +70,7 @@ router.delete('/:id', async (req, res) => {
   }
 
   await writeItems(remaining)
-  res.status(204).end()
+  res.status(204).end() // 204 No Content
 })
 
 export default router
