@@ -1,8 +1,10 @@
 import express from 'express'
+import mongoose from 'mongoose'
 import { connectDB } from './db.js'
 import itemsRouter from './routes/items.js'
 import { logger } from './middleware/logger.js'
 import { notFound, errorHandler } from './middleware/errors.js'
+import { requireDb } from './middleware/requireDb.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -11,13 +13,20 @@ const PORT = process.env.PORT || 3001
 app.use(logger) // 1. log each request
 app.use(express.json()) // 2. parse JSON request bodies into req.body
 
-// Health check: a quick way to confirm the server is up
+// Mongoose's numeric connection states, as words
+const DB_STATES = ['disconnected', 'connected', 'connecting', 'disconnecting']
+
+// Health check: confirms the server is up and shows whether the database is connected
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() })
+  res.json({
+    status: 'ok',
+    database: DB_STATES[mongoose.connection.readyState] ?? 'unknown',
+    time: new Date().toISOString(),
+  })
 })
 
-// All pantry routes live in their own router file
-app.use('/api/items', itemsRouter)
+// All pantry routes live in their own router file. requireDb runs first on each of them.
+app.use('/api/items', requireDb, itemsRouter)
 
 // Any /api URL that didn't match a route above -> 404 JSON
 app.use('/api', notFound)
