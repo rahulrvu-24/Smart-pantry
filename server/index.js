@@ -1,4 +1,5 @@
 import express from 'express'
+import { connectDB } from './db.js'
 import itemsRouter from './routes/items.js'
 import { logger } from './middleware/logger.js'
 import { notFound, errorHandler } from './middleware/errors.js'
@@ -24,6 +25,13 @@ app.use('/api', notFound)
 // Error handler goes LAST so it can catch errors from everything above
 app.use(errorHandler)
 
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`)
-})
+// Connect to the database first, then start accepting requests
+try {
+  await connectDB(process.env.MONGODB_URI)
+  app.listen(PORT, () => {
+    console.log(`API server running on http://localhost:${PORT}`)
+  })
+} catch (err) {
+  console.error(`Could not start the server: ${err.message}`)
+  process.exit(1)
+}

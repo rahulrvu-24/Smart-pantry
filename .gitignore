@@ -25,3 +25,6 @@ dist-ssr
 
 # Runtime data written by the Express server
 server/data/items.json
+
+# Secrets (database password lives here)
+.env
