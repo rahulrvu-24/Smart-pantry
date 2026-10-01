@@ -23,8 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Runtime data written by the Express server
-server/data/items.json
-
 # Secrets (database password lives here)
 .env

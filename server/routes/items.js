@@ -1,13 +1,21 @@
 import { Router } from 'express'
-import { readItems, writeItems } from '../store.js'
+import mongoose from 'mongoose'
+import Item from '../models/Item.js'
 import { createSeedItems } from '../data/seed.js'
 import { validateItem } from '../validation.js'
 
 const router = Router()
 
-// GET /api/items -> all pantry items
+async function insertSeedItems() {
+  await Item.insertMany(createSeedItems().reverse())
+}
+
+// GET /api/items -> all pantry items, newest first
 router.get('/', async (req, res) => {
-  const items = await readItems()
+  if ((await Item.countDocuments()) === 0) {
+    await insertSeedItems()
+  }
+  const items = await Item.find().sort({ _id: -1 }) // _id contains the creation time
   res.json(items)
 })
 
@@ -19,42 +27,35 @@ router.post('/', async (req, res) => {
   }
 
   const { name, quantity, unit, category, expiryDate } = req.body
-  const newItem = {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    name: name.trim(),
-    quantity: Number(quantity),
-    unit,
-    category,
-    expiryDate,
-  }
-
-  const items = await readItems()
-  items.unshift(newItem) // newest first
-  await writeItems(items)
+  const newItem = await Item.create({ name, quantity: Number(quantity), unit, category, expiryDate })
 
   res.status(201).json(newItem) // 201 Created
 })
 
-// POST /api/items/reset -> restore the sample data
+// POST /api/items/reset -> delete everything and restore the sample data
 router.post('/reset', async (req, res) => {
-  const items = createSeedItems()
-  await writeItems(items)
+  await Item.deleteMany({})
+  await insertSeedItems()
+  const items = await Item.find().sort({ _id: -1 })
   res.json(items)
 })
 
 // PATCH /api/items/:id/use -> use one; the item is removed when quantity reaches 0
 router.patch('/:id/use', async (req, res) => {
   const { id } = req.params
-  const items = await readItems()
-  const item = items.find((i) => i.id === id)
+  // A malformed id can't exist in the database, so treat it as "not found"
+  const item = mongoose.isValidObjectId(id) ? await Item.findById(id) : null
 
   if (!item) {
     return res.status(404).json({ error: `Item ${id} not found` })
   }
 
   item.quantity -= 1
-  const remaining = item.quantity > 0 ? items : items.filter((i) => i.id !== id)
-  await writeItems(remaining)
+  if (item.quantity > 0) {
+    await item.save()
+  } else {
+    await item.deleteOne()
+  }
 
   res.json(item)
 })
@@ -62,14 +63,12 @@ router.patch('/:id/use', async (req, res) => {
 // DELETE /api/items/:id -> remove an item
 router.delete('/:id', async (req, res) => {
   const { id } = req.params
-  const items = await readItems()
-  const remaining = items.filter((i) => i.id !== id)
+  const deleted = mongoose.isValidObjectId(id) ? await Item.findByIdAndDelete(id) : null
 
-  if (remaining.length === items.length) {
+  if (!deleted) {
     return res.status(404).json({ error: `Item ${id} not found` })
   }
 
-  await writeItems(remaining)
   res.status(204).end() // 204 No Content
 })
 

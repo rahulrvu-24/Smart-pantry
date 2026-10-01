@@ -1,8 +1,6 @@
 import mongoose from 'mongoose'
 import { CATEGORIES, UNITS } from '../validation.js'
 
-// The schema describes what a pantry item looks like in MongoDB.
-// Mongoose enforces these rules on every save, as a second layer behind validateItem().
 const itemSchema = new mongoose.Schema(
   {
     name: {
@@ -28,7 +26,7 @@ const itemSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // adds createdAt and updatedAt automatically
+    timestamps: true,
     toJSON: {
       versionKey: false, // hide Mongoose's internal __v field
       // Send `id` (a plain string) to the React app instead of MongoDB's `_id` object
