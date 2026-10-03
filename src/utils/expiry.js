@@ -42,3 +42,11 @@ export function countByStatus(items, today = new Date()) {
   }
   return counts
 }
+
+export function getUrgentItems(items, today = new Date()) {
+  return items
+    .map((item) => ({ item, expiry: getExpiryStatus(item.expiryDate, today) }))
+    .filter(({ expiry }) => expiry.status === 'soon' || expiry.status === 'expired')
+    .sort((a, b) => a.expiry.daysLeft - b.expiry.daysLeft)
+    .map(({ item }) => item)
+}

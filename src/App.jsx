@@ -90,7 +90,8 @@ function App() {
       {/* Changing the key remounts the boundary, clearing a caught error on navigation */}
       <ErrorBoundary key={location.pathname}>
         <Routes>
-          <Route path="/" element={<Dashboard items={items} loading={loading} />} />
+          <Route path="/" 
+          element={<Dashboard items={items} loading={loading} onUse={handleUseOne}/>} />
           <Route
             path="/pantry"
             element={
