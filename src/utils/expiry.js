@@ -34,3 +34,11 @@ export function getExpiryStatus(dateString, today = new Date()) {
   }
   return { status: 'fresh', daysLeft, label: `${daysLeft} days left` }
 }
+
+export function countByStatus(items, today = new Date()) {
+  const counts = { fresh: 0, soon: 0, expired: 0, unknown: 0 }
+  for (const item of items) {
+    counts[getExpiryStatus(item.expiryDate, today).status] += 1
+  }
+  return counts
+}

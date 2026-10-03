@@ -1,5 +1,9 @@
 import mongoose from 'mongoose'
 
+import dns from 'node:dns'
+
+dns.setServers(['1.1.1.1', '8.8.8.8'])
+
 export async function connectDB(uri) {
   if (!uri) {
     throw new Error('MONGODB_URI is not set. Copy .env.example to .env and add your Atlas connection string.')
