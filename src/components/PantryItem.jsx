@@ -1,5 +1,14 @@
 import { formatDate } from '../utils/date'
 import { getExpiryStatus } from '../utils/expiry'
+import ExpiryBadge from './ExpiryBadge'
+
+// Coloured left edge on each card, so urgent items stand out when scanning the grid
+const CARD_ACCENT = {
+  fresh: 'border-l-green-500',
+  soon: 'border-l-amber-500',
+  expired: 'border-l-red-500',
+  unknown: 'border-l-stone-300',
+}
 
 const CATEGORY_STYLES = {
   Fridge: 'bg-sky-100 text-sky-800',
@@ -18,7 +27,9 @@ function PantryItem({ item, onUse, onDelete }) {
   }
 
   return (
-    <li className="flex flex-col rounded-xl border border-stone-200 bg-white p-4 shadow-sm">
+    <li
+      className={`flex flex-col rounded-xl border border-l-4 border-stone-200 bg-white p-4 shadow-sm ${CARD_ACCENT[expiry.status]}`}
+    >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-lg font-semibold">{name}</h3>
         <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${CATEGORY_STYLES[category]}`}>
@@ -37,8 +48,11 @@ function PantryItem({ item, onUse, onDelete }) {
           <dt>Expires</dt>
           <dd className="font-medium text-stone-800">{formatDate(expiryDate)}</dd>
         </div>
-        <p className="text-right text-xs text-stone-500">{expiry.label}</p>
       </dl>
+
+      <div className="mt-3">
+        <ExpiryBadge expiryDate={expiryDate} />
+      </div>
 
       <div className="mt-4 flex gap-2 pt-1">
         <button
