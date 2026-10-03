@@ -1,4 +1,5 @@
 import { formatDate } from '../utils/date'
+import { getExpiryStatus } from '../utils/expiry'
 
 const CATEGORY_STYLES = {
   Fridge: 'bg-sky-100 text-sky-800',
@@ -6,10 +7,9 @@ const CATEGORY_STYLES = {
   Pantry: 'bg-amber-100 text-amber-800',
 }
 
-// Child component: displays ONE pantry item. Everything it shows comes from the `item` prop.
-// It doesn't change state itself; it calls the onUse / onDelete functions its parent passed in.
 function PantryItem({ item, onUse, onDelete }) {
   const { id, name, quantity, unit, category, expiryDate } = item
+  const expiry = getExpiryStatus(expiryDate)
 
   const handleDeleteClick = () => {
     if (window.confirm(`Remove ${name} from your pantry?`)) {
@@ -37,6 +37,7 @@ function PantryItem({ item, onUse, onDelete }) {
           <dt>Expires</dt>
           <dd className="font-medium text-stone-800">{formatDate(expiryDate)}</dd>
         </div>
+        <p className="text-right text-xs text-stone-500">{expiry.label}</p>
       </dl>
 
       <div className="mt-4 flex gap-2 pt-1">
