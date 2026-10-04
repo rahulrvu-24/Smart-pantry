@@ -8,8 +8,12 @@
     "dev:client": "vite",
     "server": "node --env-file-if-exists=.env server/index.js",
     "build": "vite build",
+    "start": "node --env-file-if-exists=.env server/index.js",
     "lint": "oxlint",
     "preview": "vite preview"
+  },
+  "engines": {
+    "node": ">=22.12"
   },
   "dependencies": {
     "express": "^5.2.1",

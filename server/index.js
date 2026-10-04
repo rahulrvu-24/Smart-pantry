@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import express from 'express'
 import mongoose from 'mongoose'
 import { connectDB } from './db.js'
@@ -33,6 +35,14 @@ app.use('/api/recipes', recipesRouter)
 
 // Any /api URL that didn't match a route above -> 404 JSON
 app.use('/api', notFound)
+
+const distDir = fileURLToPath(new URL('../dist', import.meta.url))
+if (existsSync(distDir)) {
+  app.use(express.static(distDir))
+  app.get('/{*splat}', (req, res) => {
+    res.sendFile('index.html', { root: distDir })
+  })
+}
 
 // Error handler goes LAST so it can catch errors from everything above
 app.use(errorHandler)
