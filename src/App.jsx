@@ -106,7 +106,7 @@ function App() {
           />
           <Route path="/add" element={<AddItem onAdd={handleAddItem} />} />
           <Route path="/recipes" element={<Recipes items={items} />} />
-          <Route path="/recipes/:id" element={<RecipeDetail />} />
+          <Route path="/recipes/:id" element={<RecipeDetail items={items} />} />
           <Route path="/error-demo" element={<ErrorDemo />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
