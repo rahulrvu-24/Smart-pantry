@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import ExpiryBadge from './ExpiryBadge'
 import { SOON_DAYS } from '../utils/expiry'
 
@@ -22,8 +23,14 @@ function UseItSoonList({ items, onUse }) {
               {item.quantity} {item.unit} · {item.category}
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <ExpiryBadge expiryDate={item.expiryDate} />
+            <Link
+              to={`/recipes?ingredient=${encodeURIComponent(item.name)}`}
+              className="shrink-0 rounded-lg bg-amber-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-600"
+            >
+              Find recipes
+            </Link>
             <button
               type="button"
               onClick={() => onUse(item.id)}

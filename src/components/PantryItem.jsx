@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { formatDate } from '../utils/date'
 import { getExpiryStatus } from '../utils/expiry'
 import ExpiryBadge from './ExpiryBadge'
@@ -50,8 +51,17 @@ function PantryItem({ item, onUse, onDelete }) {
         </div>
       </dl>
 
-      <div className="mt-3">
+      <div className="mt-3 flex items-center justify-between gap-2">
         <ExpiryBadge expiryDate={expiryDate} />
+        {/* Recipe Rescue: offer recipes for items that are about to go off */}
+        {expiry.status === 'soon' && (
+          <Link
+            to={`/recipes?ingredient=${encodeURIComponent(name)}`}
+            className="text-sm font-medium text-amber-700 hover:underline"
+          >
+            Find recipes →
+          </Link>
+        )}
       </div>
 
       <div className="mt-4 flex gap-2 pt-1">
