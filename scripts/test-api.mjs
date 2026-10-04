@@ -47,6 +47,15 @@ try {
   show('DELETE /items/:id', 204, await call('DELETE', `/items/${created.data.id}`))
   show('DELETE /items/:id  (missing -> 404)', 404, await call('DELETE', '/items/does-not-exist'))
   show('GET    /nope  (unknown route -> 404)', 404, await call('GET', '/nope'))
+
+  const recipes = await call('GET', '/recipes?ingredient=chicken')
+  show(`GET    /recipes?ingredient=chicken (${recipes.data.count ?? 0})`, 200, recipes)
+  show('GET    /recipes  (no ingredient -> 400)', 400, await call('GET', '/recipes'))
+  if (recipes.data.recipes?.length) {
+    show('GET    /recipes/:id', 200, await call('GET', `/recipes/${recipes.data.recipes[0].id}`))
+  }
+  show('GET    /recipes/:id  (missing -> 404)', 404, await call('GET', '/recipes/99999999'))
+  
 } catch {
   console.error(`Could not reach ${BASE}. Start the server first: npm run server`)
   process.exitCode = 1

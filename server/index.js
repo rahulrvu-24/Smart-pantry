@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import { connectDB } from './db.js'
 import itemsRouter from './routes/items.js'
+import recipesRouter from './routes/recipes.js'
 import { logger } from './middleware/logger.js'
 import { notFound, errorHandler } from './middleware/errors.js'
 import { requireDb } from './middleware/requireDb.js'
@@ -9,7 +10,6 @@ import { requireDb } from './middleware/requireDb.js'
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Middleware runs in order, for every request
 app.use(logger) // 1. log each request
 app.use(express.json()) // 2. parse JSON request bodies into req.body
 
@@ -27,6 +27,9 @@ app.get('/api/health', (req, res) => {
 
 // All pantry routes live in their own router file. requireDb runs first on each of them.
 app.use('/api/items', requireDb, itemsRouter)
+
+// Recipe Rescue: proxies TheMealDB (no database needed)
+app.use('/api/recipes', recipesRouter)
 
 // Any /api URL that didn't match a route above -> 404 JSON
 app.use('/api', notFound)
